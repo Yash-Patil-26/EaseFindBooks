@@ -31,7 +31,7 @@ A simple web application that helps users discover books through personalized re
 
 ### Book Recommendation
 
-![Recommendations](screenshots/recommendation.png)
+![Recommendations](screenshots/recommend.png)
 
 ### Bookbot
 
