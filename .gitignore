@@ -1,0 +1,81 @@
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+*.so
+
+# ── Virtual environments ──
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# ── Flask / app specific ──
+instance/
+.webassets-cache
+users.db
+*.db
+*.sqlite
+*.sqlite3
+
+# ── Environment variables ──
+.env
+.env.local
+.env.*.local
+*.env
+
+# ── Profile photos (user-uploaded content) ──
+static/profile_photos/*
+!static/profile_photos/.gitkeep
+
+# ── OS files ──
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── IDE / Editor ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# ── Jupyter Notebooks (if any) ──
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Distribution / Build ──
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST
+
+# ── Testing ──
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+
+# ── Logs ──
+*.log
+logs/
+
+# ── Temporary files ──
+*.tmp
+*.temp
+tmp/
+temp/

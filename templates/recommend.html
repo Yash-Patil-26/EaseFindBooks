@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Recommender | EaseFindBooks</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --color-bg-main: grey;
+      --color-bg-glass: #B3C8CF;
+      --color-text-main: #000;
+      --color-accent: #1b263b;
+      --color-accent-light: #89a8b2;
+      --color-accent-dark: #8c6cd9;
+      --color-navbar: rgba(35, 36, 58, 0.9);
+      --color-navbar-border: rgba(255, 255, 255, 0.1);
+      --color-card-hover: rgba(170, 172, 218, 0.7);
+      --color-glass-border: #3a4044;
+      --color-glass-shadow: rgba(58, 61, 65, 0.1);
+      --color-glass-text: rgba(14, 14, 14, 0.9);
+    }
+    body {
+      background: rgba(197, 177, 177, 0.9);
+      color: white;
+      background-image: linear-gradient(135deg, #9FB3DF 0%, #BDDDE4 40%, #9EC6F3 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .glass,
+    .section-box,
+    .recommend-box {
+      background: var(--color-bg-glass);
+      color: var(--color-text-main);
+      border: 1px solid var(--color-glass-border);
+      box-shadow: 0 8px 32px 0 var(--color-glass-shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .navbar, .sidebar-custom {
+      background: var(--color-navbar) !important;
+      color: var(--color-text-main);
+      border-bottom: 2px solid var(--color-navbar-border);
+    }
+    .navbar .nav-link, .navbar-brand, .sidebar-custom .nav-link {
+      color: #fff !important;
+    }
+    .navbar .nav-link.active, .navbar .nav-link:hover,
+    .sidebar-custom .nav-link.active, .sidebar-custom .nav-link:hover {
+      color: var(--color-accent) !important;
+      background: var(--color-card-hover);
+    }
+    .card, .playlist-card {
+      background: var(--color-accent-light) !important;
+      color: #fff !important;
+      border: 3px solid var(--color-glass-border) !important;
+    }
+    .card-title, .section-title, h2 {
+      color: #fff;
+    }
+    .card-text {
+      color: whitesmoke;
+    }
+    .btn-outline-primary {
+      color: whitesmoke;
+      border-color: var(--color-accent) !important;
+      background: var(--color-bg-glass);
+    }
+    .btn-outline-primary:hover, .btn-outline-primary:focus {
+      background: var(--color-accent) !important;
+      color: #fff !important;
+      border-color: var(--color-accent) !important;
+    }
+    .btn-outline-secondary {
+      color: var(--color-accent-light) !important;
+      border-color: var(--color-accent-light) !important;
+      background: transparent !important;
+    }
+    .btn-outline-secondary:hover, .btn-outline-secondary:focus {
+      background: var(--color-accent-light) !important;
+      color: var(--color-bg-main) !important;
+      border-color: var(--color-accent-light) !important;
+    }
+    input, textarea, select {
+      background: #222 !important;
+      color: #fff !important;
+      border: 1px solid #444 !important;
+    }
+    footer {
+      background: var(--color-bg-glass);
+      color: var(--color-text-main);
+      border-top: 2px solid var(--color-navbar-border);
+    }
+    footer a { color: var(--color-accent); }
+    footer a:hover { color: var(--color-accent-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--color-accent); }
+
+    /* ── Sidebar ── */
+    .sidebar-custom {
+      min-height: 100vh;
+      border-right: 2px solid var(--color-navbar-border);
+      position: fixed;
+      top: 0; left: 0;
+      width: 220px;
+      z-index: 1040;
+      padding-top: 70px;
+      box-shadow: 0 4px 24px rgba(20,22,25,0.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .sidebar-custom .nav-link {
+      color: white;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      transition: 0.2s;
+      font-weight: 500;
+    }
+    .main-content {
+      margin-left: 240px;
+      padding: 32px 16px 0 16px;
+      flex: 1 0 auto;
+    }
+    @media (max-width: 991px) {
+      .sidebar-custom { position: static; width: 100%; min-height: auto; border-right: none; padding-top: 0; }
+      .main-content { margin-left: 0; padding-top: 16px; }
+    }
+    @media (min-width: 992px) {
+      .navbar { margin-left: 220px; width: calc(100% - 220px); z-index: 1050; }
+    }
+
+    /* ── Recommend container — exact original ── */
+    .recommend-container {
+      max-width: 900px;
+      margin: 48px auto;
+      padding: 36px 32px 32px 32px;
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(20,22,25,0.10);
+      border: 1px solid var(--color-glass-border);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      color: var(--color-text-main);
+    }
+    .recommend-title {
+      color: var(--color-accent);
+      font-family: 'Amatic SC', cursive, sans-serif;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 28px;
+      letter-spacing: 1px;
+    }
+    .form-label { color: var(--color-text-main); font-weight: 500; }
+    .form-control {
+      background: rgba(255,255,255,0.10);
+      color: var(--color-text-main);
+      border: 1px solid var(--color-accent);
+      border-radius: 8px;
+    }
+    .form-control:focus {
+      background: rgba(44,46,58,0.90);
+      color: var(--color-text-main);
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 0.2rem rgba(10,33,192,0.15);
+    }
+    .btn-recommend {
+      background: #1b263b;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: 0.2s;
+    }
+    .btn-recommend:hover { background: #0d1b2a; color: #fff; }
+
+    .card {
+      background: var(--color-bg-glass) !important;
+      color: var(--color-text-main) !important;
+      border-radius: 14px;
+      border: 1px solid var(--color-glass-border) !important;
+      box-shadow: 0 2px 8px rgba(20,22,25,0.07);
+      margin-bottom: 32px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .card:hover {
+      transform: scale(1.04);
+      box-shadow: 0 4px 24px var(--color-accent-dark);
+      background: var(--color-card-hover) !important;
+    }
+    .card-img-top {
+      width: 100%; height: 180px;
+      object-fit: cover;
+      border-radius: 14px 14px 0 0;
+      background: var(--color-accent-light);
+      margin-bottom: 10px;
+    }
+    .card-title, .text-color {
+      color: var(--color-accent) !important;
+      font-size: 1.05rem; font-weight: 600;
+      margin-bottom: 0.25rem;
+      white-space: normal !important;
+      overflow-wrap: break-word !important;
+      word-break: break-word !important;
+    }
+    .card-author {
+      color: var(--color-text-muted);
+      font-size: 0.95rem; margin-bottom: 0.2rem;
+      white-space: normal !important;
+      overflow-wrap: break-word !important;
+    }
+    .card-body { width: 100%; padding: 1rem 0.5rem; text-align: center; }
+    @media (max-width: 768px) {
+      .recommend-container { padding: 18px 6px 18px 6px; }
+      .card-img-top { height: 120px; }
+    }
+
+    footer {
+      background: var(--color-bg-glass);
+      color: var(--color-text-main);
+      padding: 32px 0 0 0;
+      margin-top: 48px;
+      border-top: 2px solid var(--color-navbar-border);
+      box-shadow: 0 2px 8px rgba(20,22,25,0.07);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    footer a { color: var(--color-accent); text-decoration: none; margin-right: 12px; }
+    footer a:hover { color: var(--color-accent-light); text-decoration: underline; }
+    ::-webkit-scrollbar { background: var(--color-bg-glass); height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 4px; }
+
+    /* ── Autocomplete dropdown ── */
+    .autocomplete-wrapper { position: relative; }
+    #book-suggestions {
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: #23243a;
+      border: 1px solid var(--color-glass-border);
+      border-radius: 0 0 8px 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 2000;
+      display: none;
+    }
+    .suggestion-item {
+      padding: 9px 14px;
+      cursor: pointer;
+      color: #ddd;
+      font-size: 0.93rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .suggestion-item:hover, .suggestion-item.highlighted {
+      background: var(--color-accent);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar-custom d-none d-lg-block">
+    <a href="/" class="d-flex align-items-center mb-4 text-white text-decoration-none ps-2">
+      <span class="navbar-brand"><i class="bi bi-book-half" style="font-size:32px;"></i> EaseFindBooks</span>
+    </a>
+    <ul class="nav nav-pills flex-column mb-auto ps-2">
+      <li class="nav-item"><a href="/" class="nav-link"><i class="bi bi-house-door-fill me-2"></i> Home</a></li>
+      <li><a href="/recommend" class="nav-link active"><i class="bi bi-search me-2"></i> FindBook</a></li>
+      <li><a href="/select_mood" class="nav-link"><i class="bi bi-emoji-smile me-2"></i> GetByMood</a></li>
+      <li><a href="/contact" class="nav-link"><i class="bi bi-envelope me-2"></i> Contact</a></li>
+      <li><a href="/chatbot" class="nav-link"><i class="bi bi-robot me-2"></i> Chatbot</a></li>
+      <li><a href="/login" class="nav-link"><i class="bi bi-box-arrow-in-right me-2"></i> Login</a></li>
+      <li><a href="/book" class="nav-link">Download Books</a></li>
+    </ul>
+    <hr style="border-color: rgba(249,241,241,0.1);">
+    <div class="small ps-2" style="color: #e0e1dd;">&copy; {{ year }}<br>EaseFindBooks</div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <form class="d-flex me-3" action="/recommend_books" method="post" style="width: 320px; max-width: 100%;">
+        <input class="form-control me-2" type="text" name="user_input" placeholder="Search books..." aria-label="Search" required>
+        <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <a class="navbar-brand" href="/"><i class="bi bi-book-half"></i> EaseFindBooks</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-door-fill"></i> Home</a></li>
+          {% if session.name %}
+            <li class="nav-item ms-3">
+              <a class="nav-link" href="/profile" title="Profile" style="padding-top: 2px;">
+                <i class="bi bi-person-circle" style="font-size: 2rem; vertical-align: middle;"></i>
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item ms-3">
+              <a class="nav-link" href="/login" style="font-size: 1.15rem; font-weight: 600; border-left: 2px solid #ae89fa; margin-left: 10px; padding-left: 18px;">
+                Login
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="recommend-container glass">
+      <h2 class="recommend-title">Recommend Books</h2>
+
+      {% if error %}
+        <div class="alert alert-warning" style="background:rgba(255,193,7,0.15); border:1px solid rgba(255,193,7,0.4); color:#ffe082; border-radius:8px; padding:12px 16px; margin-bottom:16px;">
+          <i class="bi bi-exclamation-circle me-2"></i>{{ error }}
+        </div>
+      {% endif %}
+
+      <form action="/recommend_books" method="post" class="mb-4" autocomplete="off">
+        <label for="user_input" class="form-label">Enter a book title from our database:</label>
+        <div class="autocomplete-wrapper mb-3">
+          <input name="user_input" id="user_input" type="text" class="form-control"
+                 placeholder="Start typing a book title…" required
+                 value="{{ user_input or '' }}">
+          <div id="book-suggestions"></div>
+        </div>
+        <button type="submit" class="btn btn-recommend w-100">Recommend</button>
+      </form>
+
+      {% if data %}
+        <hr style="border-color:rgba(255,255,255,0.10);margin:20px 0 16px 0;">
+        <h5 class="text-color mb-3">Books similar to <strong>{{ user_input }}</strong>:</h5>
+        <div class="row">
+          {% for i in data %}
+            <div class="col-md-3 col-sm-6 mb-4">
+              <div class="card h-100">
+                <div class="card-body d-flex flex-column align-items-center">
+                  <img class="card-img-top" src="{{ i[2] }}" alt="Book cover"
+                       onerror="this.src='https://via.placeholder.com/200x180?text=No+Cover'">
+                  <h6 class="card-title mt-2 text-color">{{ i[0] }}</h6>
+                  <div class="card-author">{{ i[1] }}</div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <footer>
+    <div class="container text-center">
+      <div class="mb-2">
+        <a href="/"><i class="bi bi-house-door-fill"></i> Home</a>
+        <a href="/recommend">FindBook</a>
+        <a href="/select_mood">GetByMood</a>
+        <a href="/profile">Profile</a>
+      </div>
+      <div class="mb-2">
+        <a href="mailto:suresh112813@gmail.com">suresh112813@gmail.com</a>
+        <a href="mailto:vikasshejul591@gmail.com">vikasshejul591@gmail.com</a>
+        <a href="mailto:mahajankalyani2005@email.com">mahajankalyani2005@email.com</a>
+        <a href="mailto:yashmpatil02005@email.com">yashmpatil02005@email.com</a>
+      </div>
+      <div class="mb-2">
+        <span>Follow us:</span>
+        <a href="https://facebook.com" target="_blank"><i class="bi bi-facebook"></i></a>
+        <a href="https://twitter.com" target="_blank"><i class="bi bi-twitter"></i></a>
+        <a href="https://instagram.com" target="_blank"><i class="bi bi-instagram"></i></a>
+        <a href="https://linkedin.com" target="_blank"><i class="bi bi-linkedin"></i></a>
+      </div>
+      <div>
+        &copy; {{ year }} EaseFindBooks. All rights reserved.
+        <p>Team leader <a href="mailto:sureshrathod@gmail.com">sureshrathod@gmail.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const BOOK_TITLES = {{ book_titles | tojson }};
+    const input = document.getElementById('user_input');
+    const suggestBox = document.getElementById('book-suggestions');
+    let highlightIdx = -1;
+
+    input.addEventListener('input', function() {
+      const q = this.value.trim().toLowerCase();
+      suggestBox.innerHTML = '';
+      highlightIdx = -1;
+      if (q.length < 1) { suggestBox.style.display = 'none'; return; }
+      const matches = BOOK_TITLES.filter(t => t.toLowerCase().includes(q)).slice(0, 10);
+      if (!matches.length) { suggestBox.style.display = 'none'; return; }
+      matches.forEach(function(title) {
+        const div = document.createElement('div');
+        div.className = 'suggestion-item';
+        const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        div.innerHTML = title.replace(re, '<mark style="background:#1b263b;color:#fff;border-radius:2px;padding:0 2px;">$1</mark>');
+        div.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          input.value = title;
+          suggestBox.style.display = 'none';
+        });
+        suggestBox.appendChild(div);
+      });
+      suggestBox.style.display = 'block';
+    });
+
+    input.addEventListener('keydown', function(e) {
+      const items = suggestBox.querySelectorAll('.suggestion-item');
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+        items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIdx));
+        if (items[highlightIdx]) input.value = items[highlightIdx].textContent;
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        highlightIdx = Math.max(highlightIdx - 1, 0);
+        items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIdx));
+        if (items[highlightIdx]) input.value = items[highlightIdx].textContent;
+      } else if (e.key === 'Escape') {
+        suggestBox.style.display = 'none';
+      }
+    });
+
+    input.addEventListener('blur', function() {
+      setTimeout(() => { suggestBox.style.display = 'none'; }, 150);
+    });
+  </script>
+</body>
+</html>
