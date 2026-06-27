@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📚 EasyFindBooks
+# 📚 EaseFindBooks
 
 **Book discovery platform powered by collaborative filtering — finds books based on what readers like you enjoy.**
 
@@ -68,7 +68,7 @@ Search "1984"  →  finds users who rated it  →  finds what else they loved
 ## 📂 Project Structure
 
 ```
-EasyFindBooks/
+EaseFindBooks/
 │
 ├── app.py                    ← All routes + recommendation logic
 ├── requirements.txt
@@ -100,8 +100,8 @@ EasyFindBooks/
 
 ```bash
 # 1. Clone
-git clone https://github.com/Yash-Patil-26/EasyFindBooks.git
-cd EasyFindBooks
+git clone https://github.com/Yash-Patil-26/EaseFindBooks.git
+cd EaseFindBooks
 
 # 2. Install dependencies
 pip install -r requirements.txt
@@ -128,9 +128,9 @@ Open `http://127.0.0.1:5000` — the database is created automatically on first 
 
 | Name | Role | Email |
 |---|---|---|
-| **Suresh Rathod** | Team Leader | suresh112813@gmail.com |
+| **Vikas Shejul** | Team Leader | suresh112813@gmail.com |
 | **Yash Patil** | Developer | yashmpatil02005@email.com |
-| **Vikas Shejul** | Developer | vikasshejul591@gmail.com |
+| **Suresh Rathod** | Developer | vikasshejul591@gmail.com |
 | **Kalyani Mahajan** | Developer | mahajankalyani2005@email.com |
 
 ---
@@ -144,5 +144,12 @@ Open `http://127.0.0.1:5000` — the database is created automatically on first 
 ---
 
 <div align="center">
-Made with ❤️ by Team EasyFindBooks &nbsp;·&nbsp; First Year Engineering Project &nbsp;·&nbsp; 2025–26
+👨‍💻 Developed by
+Yash Patil
+<a href="https://github.com/Yash-Patil-26"> <img src="https://img.shields.io/badge/GitHub-Yash--Patil--26-black?style=for-the-badge&logo=github"> </a>
+
+---
+
+<div align="center">
+Made with ❤️ by Team EaseFindBooks &nbsp;·&nbsp; Second Year Engineering Project &nbsp;·&nbsp; 2025–26
 </div>
