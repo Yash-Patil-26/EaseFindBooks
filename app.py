@@ -658,8 +658,6 @@ def chatbot_search():
 
 @app.route('/search')
 def search_books():
-    if 'user_id' not in session:
-        return jsonify([])
     query = request.args.get('q', '').strip()
     if not query:
         return jsonify([])
@@ -747,7 +745,10 @@ def search_books():
 
     # ── Strategy 1: Gutenberg OPDS (whitelisted on PythonAnywhere free tier) ──
     try:
-        r = requests.get(GUTENBERG_OPDS_API, params={'query': query}, timeout=10)
+        headers = {
+            'User-Agent': 'EasyFindBooks/1.0 (https://yashpatil2026.pythonanywhere.com; yashmpatil02005@email.com)'
+        }
+        r = requests.get(GUTENBERG_OPDS_API, params={'query': query}, timeout=10, headers=headers)
         if r.status_code == 200:
             parsed = parse_opds(r.content)
             if parsed:
@@ -773,7 +774,3 @@ def search_books():
 # =========================
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-# command to run :   C:/Python313/python.exe c:/Users/admin/OneDrive/Desktop/Project/app.py 
-
