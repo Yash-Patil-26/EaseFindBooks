@@ -2,7 +2,7 @@
 
 # 📚 EaseFindBooks
 
-**A Flask-powered platform for discovering, recommending, and downloading books with machine learning based recommendations.**
+**Book discovery platform powered by collaborative filtering — finds books based on what readers like you enjoy.**
 
 ![Home Page](screenshots/home.png)
 
@@ -33,12 +33,12 @@
 
 ## ✨ Features
 
-* 🔐 **User Authentication** — Signup, login and profile management
-* 📖 **FindBook** — Search books and receive ML-powered recommendations
-* 🎭 **GetByMood** — Explore curated books by mood and genre
-* 🤖 **BookBot** — Chat assistant for book discovery
-* 📥 **Free Book Downloads** — Download public-domain books through Project Gutenberg
-* 📱 **Responsive Interface** — Optimized for desktop and mobile devices
+* 🔐 **User Authentication** — Signup, login, profile photo upload, search history
+* 📖 **FindBook** — Search from 742 books, get 5 ML-powered recommendations instantly
+* 🎭 **GetByMood** — Pick a mood (Happy, Fantasy, Thriller, Sci-Fi, Chill, etc.) and browse curated lists
+* 🤖 **BookBot** — Chat assistant: search a title, get cover, author, year & similar reads
+* 📥 **Free Book Downloads** —  Search 70,000+ free classics via Project Gutenberg (EPUB, Kindle, Text)
+* 📱 **Responsive Interface** — Works on desktop and mobile
 
 ---
 
@@ -106,12 +106,11 @@ Only public-domain books are provided through Project Gutenberg. Modern copyrigh
 
 ## 🔮 Future Improvements
 
-* ⭐ Book ratings and reviews
-* ❤️ Wishlist & reading list
-* 📊 Reading statistics dashboard
-* 📧 Email verification
-* 🤖 Smarter recommendation engine
-* 🔄 Automatic model retraining
+- [ ] Book ratings & reviews
+- [ ] Wishlist / reading list
+- [ ] Email verification
+- [ ] Real-time model retraining as users rate books
+- [ ] Reading statistics dashboard
 
 ---
 
