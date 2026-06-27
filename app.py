@@ -28,10 +28,10 @@ GUTENDEX_API         = "https://gutendex.com/books/"                     # FALLB
 # =========================
 # Data Loading
 # =========================
-popular_df = pickle.load(open(os.path.join('templates', 'popular.pkl'), 'rb'))
-pt = pickle.load(open(os.path.join('templates', 'pt.pkl'), 'rb'))
-books = pickle.load(open(os.path.join('templates', 'books.pkl'), 'rb'))
-similarity_scores = pickle.load(open(os.path.join('templates', 'similarity_scores.pkl'), 'rb'))
+popular_df = pickle.load(open(os.path.join('artifacts', 'popular.pkl'), 'rb'))
+pt = pickle.load(open(os.path.join('artifacts', 'pt.pkl'), 'rb'))
+books = pickle.load(open(os.path.join('artifacts', 'books.pkl'), 'rb'))
+similarity_scores = pickle.load(open(os.path.join('artifacts', 'similarity_scores.pkl'), 'rb'))
 
 import json as _json
 with open(os.path.join('templates', 'download_map.json')) as _f:
