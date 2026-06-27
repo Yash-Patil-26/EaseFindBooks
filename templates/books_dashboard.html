@@ -231,10 +231,15 @@
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-door-fill"></i> Home</a></li>
           {% if session.name %}
-            <li class="nav-item ms-3">
-              <a class="nav-link" href="/profile" title="Profile" style="padding-top:2px;">
-                <i class="bi bi-person-circle" style="font-size:2rem;vertical-align:middle;"></i>
+            <li class="nav-item dropdown ms-3">
+              <a class="nav-link dropdown-toggle p-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-top:2px;">
+                <i class="bi bi-person-circle" style="font-size:2rem;vertical-align:middle;color:#fff;"></i>
               </a>
+              <ul class="dropdown-menu dropdown-menu-end" style="min-width:160px;">
+                <li><a class="dropdown-item" href="/profile"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+              </ul>
             </li>
           {% else %}
             <li class="nav-item ms-3">
@@ -347,9 +352,30 @@
       resultsDiv.innerHTML = '';
       loading.style.display = 'block';
 
-      fetch('/search?q=' + encodeURIComponent(query))
+      // Call gutendex.com directly from browser — bypasses PythonAnywhere proxy entirely
+      fetch('https://gutendex.com/books/?search=' + encodeURIComponent(query) + '&languages=en')
         .then(function(res) { return res.json(); })
-        .then(function(data) {
+        .then(function(raw) {
+          // Convert gutendex format to our display format
+          var data = [];
+          (raw.results || []).forEach(function(book) {
+            var fmt     = book.formats || {};
+            var authors = book.authors || [];
+            var dl = {
+              html:   fmt['text/html'] || null,
+              epub:   fmt['application/epub+zip'] || null,
+              kindle: fmt['application/x-mobipocket-ebook'] || null,
+              text:   fmt['text/plain; charset=utf-8'] || fmt['text/plain; charset=us-ascii'] || fmt['text/plain'] || null,
+              pdf:    fmt['application/pdf'] || null
+            };
+            if (!dl.html && !dl.epub && !dl.kindle && !dl.text && !dl.pdf) return;
+            data.push({
+              title:          book.title || 'Unknown Title',
+              author:         authors.length ? authors[0].name : 'Unknown Author',
+              cover:          fmt['image/jpeg'] || fmt['image/png'] || null,
+              download_links: dl
+            });
+          });
           loading.style.display = 'none';
           resultsDiv.innerHTML = '';
 
