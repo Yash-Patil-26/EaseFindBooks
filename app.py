@@ -22,16 +22,16 @@ app.secret_key = 'your_secret_key'
 UPLOAD_FOLDER = 'static/profile_photos'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-GUTENBERG_SEARCH_API = "https://gutendex.com/books/"   # primary
-GUTENBERG_DIRECT_API = "https://www.gutenberg.org/ebooks/search.opds/"  # fallback (whitelisted on PythonAnywhere)
+GUTENBERG_OPDS_API   = "https://www.gutenberg.org/ebooks/search.opds/"  # PRIMARY — whitelisted on PythonAnywhere free
+GUTENDEX_API         = "https://gutendex.com/books/"                     # FALLBACK — works on localhost + Koyeb
 
 # =========================
 # Data Loading
 # =========================
-popular_df = pickle.load(open(os.path.join('artifacts', 'popular.pkl'), 'rb'))
-pt = pickle.load(open(os.path.join('artifacts', 'pt.pkl'), 'rb'))
-books = pickle.load(open(os.path.join('artifacts', 'books.pkl'), 'rb'))
-similarity_scores = pickle.load(open(os.path.join('artifacts', 'similarity_scores.pkl'), 'rb'))
+popular_df = pickle.load(open(os.path.join('templates', 'popular.pkl'), 'rb'))
+pt = pickle.load(open(os.path.join('templates', 'pt.pkl'), 'rb'))
+books = pickle.load(open(os.path.join('templates', 'books.pkl'), 'rb'))
+similarity_scores = pickle.load(open(os.path.join('templates', 'similarity_scores.pkl'), 'rb'))
 
 import json as _json
 with open(os.path.join('templates', 'download_map.json')) as _f:
@@ -658,108 +658,109 @@ def search_books():
     if not query:
         return jsonify([])
 
-    # ── Strategy: try gutendex.com first (works on localhost + Koyeb).
-    #    If blocked (PythonAnywhere free tier), fall back to Gutenberg OPDS feed
-    #    which IS on PythonAnywhere's allowlist (.gutenberg.org is whitelisted).
-    data = None
+    import xml.etree.ElementTree as ET
 
-    # Attempt 1: gutendex.com (full JSON, preferred)
-    try:
-        r = requests.get(
-            GUTENBERG_SEARCH_API,
-            params={'search': query, 'languages': 'en'},
-            timeout=8
-        )
-        if r.status_code == 200:
-            data = r.json()
-    except Exception:
-        data = None
-
-    # Attempt 2: Gutenberg OPDS (XML feed — whitelisted on PythonAnywhere free)
-    if data is None:
-        try:
-            import xml.etree.ElementTree as ET
-            r2 = requests.get(
-                GUTENBERG_DIRECT_API,
-                params={'query': query},
-                timeout=8
-            )
-            if r2.status_code == 200:
-                ns = {
-                    'atom':  'http://www.w3.org/2005/Atom',
-                    'dc':    'http://purl.org/dc/terms/',
-                    'opds': 'http://opds-spec.org/2010/catalog',
-                }
-                root = ET.fromstring(r2.content)
-                entries = root.findall('atom:entry', ns)
-                results = []
-                for entry in entries[:12]:
-                    title  = entry.findtext('atom:title', default='', namespaces=ns)
-                    author_el = entry.find('atom:author/atom:name', ns)
-                    author = author_el.text if author_el is not None else 'Unknown Author'
-                    cover, epub, text, html, kindle = None, None, None, None, None
-                    for link in entry.findall('atom:link', ns):
-                        rel  = link.get('rel', '')
-                        typ  = link.get('type', '')
-                        href = link.get('href', '')
-                        if 'image' in rel or 'image/jpeg' in typ:
-                            cover = href
-                        elif 'epub' in typ or 'epub' in href:
-                            epub = href
-                        elif 'mobi' in typ or 'kindle' in href:
-                            kindle = href
-                        elif 'text/plain' in typ:
-                            text = href
-                        elif 'text/html' in typ:
-                            html = href
-                    dl = {'html': html, 'epub': epub, 'kindle': kindle, 'text': text, 'pdf': None}
-                    if any(dl.values()):
-                        results.append({
-                            'title': title,
-                            'author': author,
-                            'cover': cover,
-                            'download_links': dl,
-                        })
-                return jsonify(results)
-        except Exception:
-            pass
-        return jsonify([])
-
-    # ── Parse gutendex response ──
-    result_books = []
-    for book in data.get('results', []):
-        formats     = book.get('formats', {})
-        authors     = book.get('authors', [])
-        author_name = authors[0]['name'] if authors else 'Unknown Author'
-        cover       = formats.get('image/jpeg') or formats.get('image/png') or None
-        pdf_link    = formats.get('application/pdf') or None
-        text_link   = (
-            formats.get('text/plain; charset=utf-8') or
-            formats.get('text/plain; charset=us-ascii') or
-            formats.get('text/plain') or None
-        )
-        html_link   = formats.get('text/html') or None
-        epub_link   = formats.get('application/epub+zip') or None
-        kindle_link = formats.get('application/x-mobipocket-ebook') or None
-
-        download_links = {
-            'html':   html_link,
-            'epub':   epub_link,
-            'kindle': kindle_link,
-            'text':   text_link,
-            'pdf':    pdf_link,
+    def parse_opds(content):
+        """Parse Gutenberg OPDS Atom XML into our standard result format."""
+        ns = {
+            'atom': 'http://www.w3.org/2005/Atom',
+            'dc':   'http://purl.org/dc/terms/',
         }
-        if not any(download_links.values()):
-            continue
+        try:
+            root    = ET.fromstring(content)
+            entries = root.findall('atom:entry', ns)
+        except Exception:
+            return None
 
-        result_books.append({
-            'title':          book.get('title', 'Unknown Title'),
-            'author':         author_name,
-            'cover':          cover,
-            'download_links': download_links,
-        })
+        results = []
+        for entry in entries[:16]:
+            title     = entry.findtext('atom:title', default='Unknown Title', namespaces=ns)
+            author_el = entry.find('atom:author/atom:name', ns)
+            author    = author_el.text if author_el is not None else 'Unknown Author'
 
-    return jsonify(result_books)
+            cover, epub, kindle, text, html = None, None, None, None, None
+            for link in entry.findall('atom:link', ns):
+                rel  = link.get('rel', '')
+                typ  = link.get('type', '')
+                href = link.get('href', '')
+                if not href:
+                    continue
+                # Make relative hrefs absolute
+                if href.startswith('/'):
+                    href = 'https://www.gutenberg.org' + href
+                if 'image' in rel or 'image/jpeg' in typ or 'image/png' in typ:
+                    cover = href
+                elif 'epub' in typ:
+                    epub = href
+                elif 'mobipocket' in typ or 'mobi' in typ:
+                    kindle = href
+                elif 'text/plain' in typ:
+                    text = href
+                elif 'text/html' in typ:
+                    html = href
+
+            dl = {'html': html, 'epub': epub, 'kindle': kindle, 'text': text, 'pdf': None}
+            if any(dl.values()):
+                results.append({
+                    'title':          title,
+                    'author':         author,
+                    'cover':          cover,
+                    'download_links': dl,
+                })
+        return results if results else None
+
+    def parse_gutendex(data):
+        """Parse gutendex JSON response into our standard result format."""
+        results = []
+        for book in data.get('results', []):
+            formats     = book.get('formats', {})
+            authors     = book.get('authors', [])
+            author_name = authors[0]['name'] if authors else 'Unknown Author'
+            cover       = formats.get('image/jpeg') or formats.get('image/png') or None
+            text_link   = (
+                formats.get('text/plain; charset=utf-8') or
+                formats.get('text/plain; charset=us-ascii') or
+                formats.get('text/plain') or None
+            )
+            dl = {
+                'html':   formats.get('text/html') or None,
+                'epub':   formats.get('application/epub+zip') or None,
+                'kindle': formats.get('application/x-mobipocket-ebook') or None,
+                'text':   text_link,
+                'pdf':    formats.get('application/pdf') or None,
+            }
+            if not any(dl.values()):
+                continue
+            results.append({
+                'title':          book.get('title', 'Unknown Title'),
+                'author':         author_name,
+                'cover':          cover,
+                'download_links': dl,
+            })
+        return results if results else None
+
+    # ── Strategy 1: Gutenberg OPDS (whitelisted on PythonAnywhere free tier) ──
+    try:
+        r = requests.get(GUTENBERG_OPDS_API, params={'query': query}, timeout=10)
+        if r.status_code == 200:
+            parsed = parse_opds(r.content)
+            if parsed:
+                return jsonify(parsed)
+    except Exception:
+        pass
+
+    # ── Strategy 2: Gutendex JSON (works on localhost, Koyeb, paid PythonAnywhere) ──
+    try:
+        r2 = requests.get(GUTENDEX_API, params={'search': query, 'languages': 'en'}, timeout=10)
+        if r2.status_code == 200:
+            parsed2 = parse_gutendex(r2.json())
+            if parsed2:
+                return jsonify(parsed2)
+    except Exception:
+        pass
+
+    return jsonify([])
+
 
 # =========================
 # Main Entry
