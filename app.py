@@ -280,6 +280,12 @@ app.register_blueprint(auth_bp)
 # =========================
 # Auth Routes
 # =========================
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out successfully.', 'info')
+    return redirect('/login')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
