@@ -521,31 +521,46 @@ def get_books_from_mood():
     if not books_for_mood:
         return render_template('select_book.html', mood=mood, books=[], error="No books available for this mood.")
 
-    selected_books = random.sample(books_for_mood, min(8, len(books_for_mood)))
+    selected_books = books_for_mood   # use ALL books in the mood list
     recommended_books = []
+    seen_titles = set()
 
     for mood_book in selected_books:
+        # First: add the mood book itself if it has an image
+        temp_df = books[books['Book-Title'] == mood_book].drop_duplicates('Book-Title')
+        if not temp_df.empty and mood_book not in seen_titles:
+            img = temp_df['Image-URL-M'].values[0]
+            if img and str(img) != 'nan':
+                recommended_books.append({
+                    'base':   mood_book,
+                    'title':  temp_df['Book-Title'].values[0],
+                    'author': temp_df['Book-Author'].values[0],
+                    'image':  img
+                })
+                seen_titles.add(mood_book)
+
+        # Then: add similar books from the recommender
         if mood_book in pt.index:
             index = np.where(pt.index == mood_book)[0][0]
-            similar_items = sorted(list(enumerate(similarity_scores[index])), key=lambda x: x[1], reverse=True)[1:5]
+            similar_items = sorted(
+                list(enumerate(similarity_scores[index])),
+                key=lambda x: x[1], reverse=True
+            )[1:4]
             for i in similar_items:
-                temp_df = books[books['Book-Title'] == pt.index[i[0]]].drop_duplicates('Book-Title')
-                if not temp_df.empty:
-                    recommended_books.append({
-                        'base': mood_book,
-                        'title': temp_df['Book-Title'].values[0],
-                        'author': temp_df['Book-Author'].values[0],
-                        'image': temp_df['Image-URL-M'].values[0]
-                    })
-        else:
-            temp_df = books[books['Book-Title'] == mood_book].drop_duplicates('Book-Title')
-            if not temp_df.empty:
-                recommended_books.append({
-                    'base': mood_book,
-                    'title': temp_df['Book-Title'].values[0],
-                    'author': temp_df['Book-Author'].values[0],
-                    'image': temp_df['Image-URL-M'].values[0]
-                })
+                sim_title = pt.index[i[0]]
+                if sim_title in seen_titles:
+                    continue
+                sim_df = books[books['Book-Title'] == sim_title].drop_duplicates('Book-Title')
+                if not sim_df.empty:
+                    img = sim_df['Image-URL-M'].values[0]
+                    if img and str(img) != 'nan':
+                        recommended_books.append({
+                            'base':   mood_book,
+                            'title':  sim_df['Book-Title'].values[0],
+                            'author': sim_df['Book-Author'].values[0],
+                            'image':  img
+                        })
+                        seen_titles.add(sim_title)
 
     return render_template('select_book.html', mood=mood, books=recommended_books)
 
@@ -774,3 +789,7 @@ def search_books():
 # =========================
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# command to run :   C:/Python313/python.exe c:/Users/admin/OneDrive/Desktop/Project/app.py 
+
