@@ -28,10 +28,10 @@ GUTENDEX_API         = "https://gutendex.com/books/"                     # FALLB
 # =========================
 # Data Loading
 # =========================
-popular_df = pickle.load(open(os.path.join('artifacts', 'popular.pkl'), 'rb'))
-pt = pickle.load(open(os.path.join('artifacts', 'pt.pkl'), 'rb'))
-books = pickle.load(open(os.path.join('artifacts', 'books.pkl'), 'rb'))
-similarity_scores = pickle.load(open(os.path.join('artifacts', 'similarity_scores.pkl'), 'rb'))
+popular_df = pickle.load(open(os.path.join('templates', 'popular.pkl'), 'rb'))
+pt = pickle.load(open(os.path.join('templates', 'pt.pkl'), 'rb'))
+books = pickle.load(open(os.path.join('templates', 'books.pkl'), 'rb'))
+similarity_scores = pickle.load(open(os.path.join('templates', 'similarity_scores.pkl'), 'rb'))
 
 import json as _json
 with open(os.path.join('templates', 'download_map.json')) as _f:
@@ -521,46 +521,59 @@ def get_books_from_mood():
     if not books_for_mood:
         return render_template('select_book.html', mood=mood, books=[], error="No books available for this mood.")
 
-    selected_books = books_for_mood   # use ALL books in the mood list
-    recommended_books = []
-    seen_titles = set()
+    # ── Collect similarity scores across ALL mood seed books ──
+    # For every book in pt (all 742), sum up its similarity to every seed book
+    # Sort by total score → return top books (up to 60)
+    # This shows the FULL range of books relevant to the mood, not just 12 curated ones
 
-    for mood_book in selected_books:
-        # First: add the mood book itself if it has an image
-        temp_df = books[books['Book-Title'] == mood_book].drop_duplicates('Book-Title')
-        if not temp_df.empty and mood_book not in seen_titles:
-            img = temp_df['Image-URL-M'].values[0]
+    score_map = {}  # title -> cumulative similarity score
+
+    for mood_book in books_for_mood:
+        if mood_book not in pt.index:
+            continue
+        idx = np.where(pt.index == mood_book)[0][0]
+        for i, score in enumerate(similarity_scores[idx]):
+            if score <= 0:
+                continue
+            title = pt.index[i]
+            score_map[title] = score_map.get(title, 0) + score
+
+    # Sort all books by cumulative mood-relevance score
+    sorted_titles = sorted(score_map.keys(), key=lambda t: score_map[t], reverse=True)
+
+    recommended_books = []
+    seen = set()
+    # Include seed books first (they define the mood)
+    for seed in books_for_mood:
+        if seed in seen:
+            continue
+        df = books[books['Book-Title'] == seed].drop_duplicates('Book-Title')
+        if not df.empty:
+            img = df['Image-URL-M'].values[0]
             if img and str(img) != 'nan':
                 recommended_books.append({
-                    'base':   mood_book,
-                    'title':  temp_df['Book-Title'].values[0],
-                    'author': temp_df['Book-Author'].values[0],
+                    'title':  df['Book-Title'].values[0],
+                    'author': df['Book-Author'].values[0],
                     'image':  img
                 })
-                seen_titles.add(mood_book)
+                seen.add(seed)
 
-        # Then: add similar books from the recommender
-        if mood_book in pt.index:
-            index = np.where(pt.index == mood_book)[0][0]
-            similar_items = sorted(
-                list(enumerate(similarity_scores[index])),
-                key=lambda x: x[1], reverse=True
-            )[1:4]
-            for i in similar_items:
-                sim_title = pt.index[i[0]]
-                if sim_title in seen_titles:
-                    continue
-                sim_df = books[books['Book-Title'] == sim_title].drop_duplicates('Book-Title')
-                if not sim_df.empty:
-                    img = sim_df['Image-URL-M'].values[0]
-                    if img and str(img) != 'nan':
-                        recommended_books.append({
-                            'base':   mood_book,
-                            'title':  sim_df['Book-Title'].values[0],
-                            'author': sim_df['Book-Author'].values[0],
-                            'image':  img
-                        })
-                        seen_titles.add(sim_title)
+    # Then add similarity-ranked books until we have up to 60
+    for title in sorted_titles:
+        if len(recommended_books) >= 60:
+            break
+        if title in seen:
+            continue
+        df = books[books['Book-Title'] == title].drop_duplicates('Book-Title')
+        if not df.empty:
+            img = df['Image-URL-M'].values[0]
+            if img and str(img) != 'nan':
+                recommended_books.append({
+                    'title':  df['Book-Title'].values[0],
+                    'author': df['Book-Author'].values[0],
+                    'image':  img
+                })
+                seen.add(title)
 
     return render_template('select_book.html', mood=mood, books=recommended_books)
 
