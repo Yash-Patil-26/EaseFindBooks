@@ -97,8 +97,7 @@ input, textarea, select {
       border-right: 2px solid var(--color-navbar-border);
       position: fixed;
       top: 0; left: 0;
-      width: 220px;
-      z-index: 1040;
+            z-index: 1040;
       padding-top: 70px;
       box-shadow: 0 4px 24px rgba(20,22,25,0.10);
       backdrop-filter: blur(10px);
@@ -112,8 +111,8 @@ input, textarea, select {
       font-weight: 500;
     }
     @media (min-width: 992px) {
-      .navbar { margin-left: 220px; width: calc(100% - 220px); z-index: 1050; }
-      .chatbot-wrapper { margin-left: 240px; }
+      .navbar {  width: 100%; z-index: 1050; }
+      .chatbot-wrapper {  }
     }
     @media (max-width: 991px) {
       .sidebar-custom { position: static; width: 100%; min-height: auto; border-right: none; padding-top: 0; }
@@ -349,7 +348,7 @@ input, textarea, select {
       </button>
       <a class="navbar-brand me-auto mb-0" href="/"><i class="bi bi-book-half"></i> EaseFindBooks</a>
       <form class="d-flex flex-grow-1 mx-2" action="/recommend_books" method="post"
-            style="max-width:380px;min-width:0;">
+            class="nav-search-form">
         <input class="form-control form-control-sm me-1" type="text" name="user_input"
                placeholder="Search books..." required>
         <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-search"></i></button>

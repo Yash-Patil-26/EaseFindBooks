@@ -61,8 +61,7 @@ body {
       position: fixed;
       top: 0;
       left: 0;
-      width: 220px;
-      z-index: 1040;
+            z-index: 1040;
       padding-top: 70px;
       box-shadow: 0 4px 24px rgba(20,22,25,0.10);
       backdrop-filter: blur(10px);
@@ -79,11 +78,7 @@ body {
       background: var(--color-card-hover);
       color: var(--color-accent);
     }
-    .main-content {
-      margin-left: 240px;
-      padding: 32px 16px 0 16px;
-      min-height: 100vh;
-    }
+    .main-content { padding: 24px 16px 0 16px; min-height: 80vh; }
     @media (max-width: 991px) {
       .sidebar-custom {
         position: static;
@@ -92,8 +87,7 @@ body {
         border-right: none;
         padding-top: 0;
       }
-      .main-content {
-        margin-left: 0;
+      .main-content { 
         padding-top: 16px;
       }
     }
@@ -248,8 +242,8 @@ body {
     }
     @media (min-width: 992px) {
       .navbar {
-        margin-left: 220px;
-        width: calc(100% - 220px);
+        
+        width: 100%;
         z-index: 1050;
       }
     }
@@ -269,7 +263,7 @@ body {
       </button>
       <a class="navbar-brand me-auto mb-0" href="/"><i class="bi bi-book-half"></i> EaseFindBooks</a>
       <form class="d-flex flex-grow-1 mx-2" action="/recommend_books" method="post"
-            style="max-width:380px;min-width:0;">
+            class="nav-search-form">
         <input class="form-control form-control-sm me-1" type="text" name="user_input"
                placeholder="Search books..." required>
         <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-search"></i></button>
@@ -474,23 +468,25 @@ body {
   </script>
 
   <!-- Footer -->
-  <footer>
-    <div class="container text-center">
-      <div class="mb-2">
-        <a href="mailto:suresh112813@gmail.com">suresh112813@gmail.com</a>
-        <a href="mailto:vikasshejul591@gmail.com">vikasshejul591@gmail.com</a>
-        <a href="mailto:mahajankalyani2005@email.com">mahajankalyani2005@email.com</a>
-        <a href="mailto:yashmpatil02005@email.com">yashmpatil02005@email.com</a>
+    <footer>
+    <div class="container text-center py-3">
+      <div class="mb-2" style="font-size:1.1rem;font-weight:600;letter-spacing:1px;">
+        <i class="bi bi-book-half me-1"></i> EaseFindBooks
       </div>
-      <div class="mb-2">
-        <span>Follow us:</span>
-        <a href="https://facebook.com" target="_blank"><i class="bi bi-facebook"></i></a>
-        <a href="https://twitter.com" target="_blank"><i class="bi bi-twitter"></i></a>
-        <a href="https://instagram.com" target="_blank"><i class="bi bi-instagram"></i></a>
-        <a href="https://linkedin.com" target="_blank"><i class="bi bi-linkedin"></i></a>
+      <div class="mb-2" style="color:rgba(0,0,0,0.55);font-size:0.85rem;">
+        Discover books you'll love — powered by collaborative filtering.
       </div>
-      <div>
-        &copy; {{ year }} EaseFindBooks. All rights reserved.
+      <div class="mb-3">
+        <a href="https://facebook.com" target="_blank" style="margin:0 8px;font-size:1.3rem;"><i class="bi bi-facebook"></i></a>
+        <a href="https://twitter.com" target="_blank" style="margin:0 8px;font-size:1.3rem;"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://instagram.com" target="_blank" style="margin:0 8px;font-size:1.3rem;"><i class="bi bi-instagram"></i></a>
+        <a href="https://linkedin.com" target="_blank" style="margin:0 8px;font-size:1.3rem;"><i class="bi bi-linkedin"></i></a>
+        <a href="https://github.com/Yash-Patil-26" target="_blank" style="margin:0 8px;font-size:1.3rem;"><i class="bi bi-github"></i></a>
+      </div>
+      <div style="font-size:0.8rem;color:rgba(0,0,0,0.45);">
+        &copy; {{ year }} EaseFindBooks &nbsp;|&nbsp;
+        <a href="/contact" style="text-decoration:none;">Contact Us</a> &nbsp;|&nbsp;
+        First Year Engineering Project
       </div>
     </div>
   </footer>
