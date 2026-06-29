@@ -9,8 +9,8 @@
   <style>
     :root {
       --color-bg-main: grey;
-      --color-bg-glass: #B3C8CF;
-      --color-text-main: #000;
+      --color-bg-glass: rgba(255,255,255,0.88);
+      --color-text-main: #1a1a2e;
       --color-accent: #1b263b;
       --color-accent-light: #89a8b2;
       --color-accent-dark: #8c6cd9;
@@ -36,8 +36,8 @@
       color: var(--color-text-main);
       border: 1px solid var(--color-glass-border);
       box-shadow: 0 8px 32px 0 var(--color-glass-shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .navbar, .sidebar-custom {
       background: var(--color-navbar) !important;
@@ -53,12 +53,12 @@
       background: var(--color-card-hover);
     }
     .card, .playlist-card {
-      background: var(--color-accent-light) !important;
-      color: #fff !important;
-      border: 3px solid var(--color-glass-border) !important;
+      background: rgba(255,255,255,0.92) !important;
+      color: #1a1a2e !important;
+      border: 1.5px solid rgba(100,130,160,0.25) !important;
     }
     .card-title, .section-title, h2 {
-      color: #fff;
+      color: #1a1a2e;
     }
     .card-text {
       color: whitesmoke;
@@ -79,7 +79,7 @@
       background: transparent !important;
     }
     .btn-outline-secondary:hover, .btn-outline-secondary:focus {
-      background: var(--color-accent-light) !important;
+      background: rgba(255,255,255,0.92) !important;
       color: var(--color-bg-main) !important;
       border-color: var(--color-accent-light) !important;
     }
@@ -106,8 +106,8 @@
             z-index: 1040;
       padding-top: 70px;
       box-shadow: 0 4px 24px rgba(20,22,25,0.10);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .sidebar-custom .nav-link {
       color: white;
@@ -133,8 +133,8 @@
       border-radius: 18px;
       box-shadow: 0 2px 16px rgba(20,22,25,0.10);
       border: 1px solid var(--color-glass-border);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
       color: var(--color-text-main);
     }
     .recommend-title {
@@ -178,8 +178,8 @@
       margin-bottom: 32px;
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .card:hover {
       transform: scale(1.04);
@@ -190,11 +190,11 @@
       width: 100%; height: 180px;
       object-fit: cover;
       border-radius: 14px 14px 0 0;
-      background: var(--color-accent-light);
+      background: rgba(255,255,255,0.92);
       margin-bottom: 10px;
     }
     .card-title, .text-color {
-      color: var(--color-accent) !important;
+      color: #1a1a2e !important;
       font-size: 1.05rem; font-weight: 600;
       margin-bottom: 0.25rem;
       white-space: normal !important;
@@ -220,8 +220,8 @@
       margin-top: 48px;
       border-top: 2px solid var(--color-navbar-border);
       box-shadow: 0 2px 8px rgba(20,22,25,0.07);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     footer a { color: var(--color-accent); text-decoration: none; margin-right: 12px; }
     footer a:hover { color: var(--color-accent-light); text-decoration: underline; }

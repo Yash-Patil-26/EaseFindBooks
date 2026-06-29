@@ -9,8 +9,8 @@
   <style>
     :root {
   --color-bg-main: grey;
-  --color-bg-glass:#B3C8CF;
-  --color-text-main: #000;
+  --color-bg-glass: rgba(255,255,255,0.88);
+  --color-text-main: #1a1a2e;
   --color-accent: #1b263b;
   --color-accent-light:#89a8b2;
   --color-accent-dark: #8c6cd9;
@@ -23,7 +23,7 @@
 }
 body {
   background:#415a77;
-  color: #1b263b;
+  color: #1a1a2e;
   background-image: linear-gradient(135deg, #9FB3DF 0%, #BDDDE4 40%, #9EC6F3 100%);
   
 }
@@ -31,8 +31,8 @@ body {
     .glass {
       background: var(--color-bg-glass);
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
       border-radius: 16px;
       border: 1px solid var(--color-glass-border);
     }
@@ -40,8 +40,8 @@ body {
       background: var(--color-navbar) !important;
       border-bottom: 2px solid var(--color-navbar-border);
       box-shadow: 0 4px 24px rgba(20,22,25,0.10);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .navbar .nav-link, .navbar-brand {
       color: white;
@@ -64,8 +64,8 @@ body {
             z-index: 1040;
       padding-top: 70px;
       box-shadow: 0 4px 24px rgba(20,22,25,0.10);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .sidebar-custom .nav-link {
       color: white;
@@ -93,7 +93,7 @@ body {
     }
     .welcome-message {
       background: var(--color-card-hover);
-      color: #1b263b;
+      color: #1a1a2e;
       border-radius: 12px;
       padding: 18px 0;
       font-size: 1.3rem;
@@ -101,8 +101,8 @@ body {
       text-align: center;
       border: 1px solid var(--color-glass-border);
       box-shadow: 0 2px 8px rgba(20,22,25,0.10);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .carousel-inner {
       background: var(--color-bg-glass);
@@ -111,11 +111,11 @@ body {
       padding: 24px 0;
       box-shadow: 0 2px 8px rgba(20,22,25,0.07);
       border: none;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .carousel-item blockquote {
-      color: #1b263b;
+      color: #1a1a2e;
       font-size: 1.5rem;
       font-family: 'Amatic SC', cursive, sans-serif;
       text-shadow: 0 1px 2px rgba(44,46,58,0.13);
@@ -131,11 +131,11 @@ body {
       padding: 32px 24px;
       margin-bottom: 32px;
       border: 1px solid var(--color-glass-border);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .section-title {
-      color: #1b263b;
+      color: #1a1a2e;
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 18px;
@@ -143,15 +143,15 @@ body {
       text-shadow: 0 1px 2px rgba(44,46,58,0.13);
     }
     .playlist-card, .card {
-      background: var(--color-accent-light) !important;
+      background: rgba(255,255,255,0.92) !important;
       color: #1b263b ;
       border-radius: 14px;
-      border: 3px solid var(--color-glass-border) !important;
+      border: 1.5px solid rgba(100,130,160,0.25) !important;
       box-shadow: 0 2px 8px rgba(20,22,25,0.07);
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .playlist-card:hover, .card:hover {
       transform: scale(1.04);
@@ -163,7 +163,7 @@ body {
       height: 180px;
       object-fit: cover;
       border-radius: 14px 14px 0 0;
-      background: var(--color-accent-light);
+      background: rgba(255,255,255,0.92);
     }
     .card-title {
       color: white;
@@ -191,7 +191,7 @@ body {
       border-color: var(--color-accent) !important;
       background: var(--color-bg-glass);
       font-weight: 600;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(0px);
     }
     .btn-outline-primary:hover, .btn-outline-primary:focus {
       background: var(--color-accent) !important;
@@ -204,7 +204,7 @@ body {
       background: transparent !important;
     }
     .btn-outline-secondary:hover, .btn-outline-secondary:focus {
-      background: var(--color-accent-light) !important;
+      background: rgba(255,255,255,0.92) !important;
       color: var(--color-bg-main) !important;
       border-color: var(--color-accent-light) !important;
     }
@@ -215,8 +215,8 @@ body {
       margin-top: 48px;
       border-top: 2px solid var(--color-navbar-border);
       box-shadow: 0 2px 8px rgba(20,22,25,0.07);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     footer a {
       color: var(--color-accent);
