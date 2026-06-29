@@ -1,9 +1,10 @@
-# ── Python ──
+# ── Python bytecode ──
 __pycache__/
+**/__pycache__/
 *.py[cod]
-*$py.class
 *.pyo
 *.pyd
+*.pyc
 .Python
 *.so
 
@@ -14,25 +15,27 @@ ENV/
 .venv/
 .env/
 
-# ── Flask / app specific ──
-instance/
-.webassets-cache
+# ── Flask runtime database ──
 users.db
 *.db
 *.sqlite
 *.sqlite3
+instance/
+.webassets-cache
 
-# ── Environment variables ──
+# ── Secret / environment config ──
 .env
 .env.local
 .env.*.local
 *.env
+config.py
+secrets.py
 
-# ── Profile photos (user-uploaded content) ──
+# ── User-uploaded content ──
 static/profile_photos/*
 !static/profile_photos/.gitkeep
 
-# ── OS files ──
+# ── OS junk files ──
 .DS_Store
 .DS_Store?
 ._*
@@ -51,7 +54,7 @@ desktop.ini
 .project
 .pydevproject
 
-# ── Jupyter Notebooks (if any) ──
+# ── Jupyter Notebooks ──
 .ipynb_checkpoints/
 *.ipynb
 
