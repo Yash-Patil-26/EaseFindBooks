@@ -9,12 +9,12 @@
   <style>
     :root {
       --color-bg-main: #2C2E3A;
-      --color-bg-glass: rgba(255,255,255,0.88);
+      --color-bg-glass: rgba(44,46,58,0.70);
       --color-glass-border: rgba(179,180,189,0.25);
       --color-accent: #1b263b;
       --color-accent-dark: #050A44;
       --color-accent-light: #B3B4BD;
-      --color-text-main: #1a1a2e;
+      --color-text-main: #fff;
       --color-text-muted: #B3B4BD;
       --color-navbar: rgba(44,46,58,0.80);
       --color-navbar-border: #141619;
@@ -32,8 +32,8 @@
     .glass, .container {
       background: var(--color-bg-glass) !important;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-      backdrop-filter: blur(0px);
-      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 16px;
       border: 1px solid var(--color-glass-border);
       color: var(--color-text-main);
@@ -42,8 +42,8 @@
       background: var(--color-navbar) !important;
       border-bottom: 2px solid var(--color-navbar-border);
       box-shadow: 0 4px 24px rgba(20,22,25,0.10);
-      backdrop-filter: blur(0px);
-      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .navbar .navbar-brand {
       color: #fff !important;
@@ -82,8 +82,8 @@
       color: var(--color-text-main) !important;
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      backdrop-filter: blur(0px);
-      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       height: 100%;
     }
     .card:hover {
@@ -97,10 +97,10 @@
       object-fit: cover;
       border-top-left-radius: 14px;
       border-top-right-radius: 14px;
-      background: rgba(255,255,255,0.92);
+      background: var(--color-accent-light);
     }
     .card-title {
-      color: #1a1a2e !important;
+      color: var(--color-accent) !important;
       font-size: 1.08rem;
       font-weight: 600;
       margin-bottom: 0.25rem;
@@ -155,8 +155,8 @@
       margin-top: 48px;
       border-top: 2px solid var(--color-navbar-border);
       box-shadow: 0 2px 8px rgba(20,22,25,0.07);
-      backdrop-filter: blur(0px);
-      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     footer a {
       color: var(--color-accent);
@@ -179,8 +179,8 @@
   <style>
 :root {
   --color-bg-main: grey;
-  --color-bg-glass: rgba(255,255,255,0.88);
-  --color-text-main: #1a1a2e;
+  --color-bg-glass:#B3C8CF;
+  --color-text-main: #e6e6e6;
   --color-accent: #1b263b;
   --color-accent-light:#89a8b2;
   --color-accent-dark: #8c6cd9;
@@ -203,8 +203,8 @@ body {
   color: var(--color-text-main);
   border: 1px solid var(--color-glass-border);
   box-shadow: 0 8px 32px 0 var(--color-glass-shadow);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .navbar, .sidebar-custom {
   background: var(--color-navbar) !important;
@@ -220,9 +220,9 @@ body {
   background: var(--color-card-hover);
 }
 .card, .playlist-card {
-  background: rgba(255,255,255,0.92) !important;
-  color: #1a1a2e !important;
-  border: 1.5px solid rgba(100,130,160,0.25) !important;
+  background: var(--color-accent-light) !important;
+  color: #fff !important;
+  border: 3px solid var(--color-glass-border) !important;
 }
 .card-title, .section-title, h2 {
   color: #fff;
@@ -246,7 +246,7 @@ body {
   background: transparent !important;
 }
 .btn-outline-secondary:hover, .btn-outline-secondary:focus {
-  background: rgba(255,255,255,0.92) !important;
+  background: var(--color-accent-light) !important;
   color: var(--color-bg-main) !important;
   border-color: var(--color-accent-light) !important;
 }

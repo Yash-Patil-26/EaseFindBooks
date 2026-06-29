@@ -9,8 +9,8 @@
   <style>
     :root {
       --color-bg-main: grey;
-      --color-bg-glass: rgba(255,255,255,0.88);
-      --color-text-main: #1a1a2e;
+      --color-bg-glass:#B3C8CF;
+      --color-text-main: #e6e6e6;
       --color-accent: #ae89fa;
       --color-accent-light:#89a8b2;
       --color-accent-dark: #8c6cd9;
@@ -46,7 +46,7 @@
       flex-wrap: wrap;
       background: var(--color-bg-glass);
       border-radius: 20px;
-      backdrop-filter: blur(0px);
+      backdrop-filter: blur(20px);
       box-shadow: 0 8px 32px var(--color-glass-shadow);
       border: 1px solid var(--color-glass-border);
       overflow: hidden;
@@ -98,7 +98,7 @@
       min-width: 300px;
       padding: 30px;
       background: var(--color-bg-glass);
-      backdrop-filter: blur(0px);
+      backdrop-filter: blur(25px);
       border-left: 1px solid var(--color-glass-border);
       display: flex;
       flex-direction: column;
@@ -178,8 +178,8 @@
       background: var(--color-navbar) !important;
       border-bottom: 2px solid var(--color-navbar-border);
       box-shadow: 0 4px 24px rgba(20,22,25,0.10);
-      backdrop-filter: blur(0px);
-      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .navbar .navbar-brand {
       color: var(--color-accent) !important;
@@ -211,12 +211,12 @@
       border: 1px solid var(--color-accent) !important;
     }
     .card, .playlist-card {
-      background: rgba(255,255,255,0.92) !important;
-      color: #1a1a2e !important;
-      border: 1.5px solid rgba(100,130,160,0.25) !important;
+      background: var(--color-accent-light) !important;
+      color: #fff !important;
+      border: 3px solid var(--color-glass-border) !important;
     }
     .card-title, .section-title, h2 {
-      color: #1a1a2e;
+      color: #fff;
     }
     .card-text {
       color: whitesmoke;
